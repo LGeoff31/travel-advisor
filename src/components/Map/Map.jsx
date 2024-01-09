@@ -68,5 +68,5 @@ const Map = ({
       </GoogleMapReact>
     </div>
   );
-};
+}; //s
 export default Map;
