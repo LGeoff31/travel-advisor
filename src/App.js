@@ -3,7 +3,7 @@ import Header from "./components/Header/Header";
 
 import Map from "./components/Map/Map";
 import PlaceDetails from "./components/PlaceDetails/PlaceDetails";
-import { Grid } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import CssBaseLine from "@mui/material/CssBaseline";
 import List from "./components/List/List";
 import { getPlacesData } from "./api";
@@ -13,11 +13,18 @@ const App = () => {
   const [coordinates, setCoordinates] = useState({});
   const [bounds, setBounds] = useState({});
   const [childClicked, setChildClicked] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [type, setType] = useState("restaurants");
   const [rating, setRating] = useState("");
   const [pricing, setPricing] = useState("");
-  const [filteredPlaces, setFilteredPlaces] = useState([]);
+  // const [filteredPlaces, setFilteredPlaces] = useState([]);
+
+  const filteredPlaces = places?.filter((place) => {
+    const ratingFilter = place.rating > rating;
+    const pricingFilter = place.price_level?.includes(pricing);
+
+    return ratingFilter && pricingFilter;
+  });
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -26,16 +33,11 @@ const App = () => {
       }
     );
   }, []);
-  useEffect(() => {
-    const filteredPlaces = places?.filter((place) => {
-      const ratingFilter = place.rating > rating;
-      const pricingFilter = place.price_level?.includes(pricing);
+  // useEffect(() => {
 
-      return ratingFilter && pricingFilter;
-    });
-    setFilteredPlaces(filteredPlaces);
-    console.log("rating changed");
-  }, [rating, pricing, places]);
+  //   setFilteredPlaces(filteredPlaces);
+  //   console.log("rating changed");
+  // }, [rating, pricing, places]);
 
   useEffect(() => {
     if (bounds.sw && bounds.ne) {
@@ -52,7 +54,10 @@ const App = () => {
       });
     }
   }, [bounds, type]);
-
+  if (isLoading) {
+    <Typography variant="h1">Loading...</Typography>;
+  }
+  console.log("Already loaded");
   return (
     <div style={{ background: "rgb(225 246 255)" }}>
       <CssBaseLine />

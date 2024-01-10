@@ -15,7 +15,9 @@ const Map = ({
 }) => {
   const classes = useStyles();
   const isDesktop = useMediaQuery("(min-width:600px)"); //will be set, set false if set above 600px
-
+  if (!places) {
+    <Typography>Loading...</Typography>;
+  }
   return (
     <div className={classes.mapContainer}>
       <GoogleMapReact
